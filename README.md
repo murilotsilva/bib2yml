@@ -1,5 +1,5 @@
 # bib2yml
-Simple Python3 code to convert .bib files to .yml
+Simple Python3 code to convert .bib files to .yml.
 
 ## Requirements
  - Python3
@@ -12,7 +12,29 @@ You can convert any number of bibtex .bib files into .yml by using the command
 
     python3 bib2yml.py -i inputfile.bib
     
-This will create a simple .yml file named `inputfile1.yml`. If you want to specify the name of the output file, you can write
+This will create a simple .yml file named `inputfile1.yml`. Each entry in the .bib file will be identified as an item, with fields being key/value pairs. For example, the bibtex entry
+
+```bibtex
+@article{entry01,
+ author={Seinfeld, Jerry},
+ title={Seinfeld: a paper about nothing},
+ year={1989}
+ journal={National Broadcast Channel}
+}
+```
+will be converted to
+
+```yaml
+- id: entry01
+  authors:
+    - names: Jerry
+      surnames: Seinfeld
+  title: Seinfeld: a paper about nothing
+  year: 1989
+  journal: National Broadcast Channel
+```
+
+If you want to specify the name of the output file, you can write
 
     python3 bib2yml.py -i inputfile.bib -o outputfile.yml
 
@@ -31,3 +53,4 @@ This will create two separate output files named `inputfile1.yml` and `inputfile
 If you want to combine multiple .bib files into a single .yml file, you can use the command
 
     python3 bib2yml.py -i inputfile1.bib inputfile2.bib -o outputfile.bib
+
