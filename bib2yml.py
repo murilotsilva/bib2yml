@@ -23,8 +23,8 @@ def bib_to_YAML(inputFiles,outputFiles):
                 print("  authors:", file=open(outputFiles[0], "a"))
                 for author in range(len(bibAuthors)):
                     detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1)
-                    print(f"    - names: {detexed_author.split(',')[1]}", file=open(outputFiles[0], "a"))
-                    print(f"      surnames: {detexed_author.split(',')[0]}", file=open(outputFiles[0], "a"))
+                    print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFiles[0], "a"))
+                    print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFiles[0], "a"))
                 for field in bibEntry:
                     # Remove accents and brackets from BibTeX field, and substitute underscores
                     detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','—')
@@ -36,19 +36,18 @@ def bib_to_YAML(inputFiles,outputFiles):
             bibdata = parser.parse_file(inputFiles[i])
             for bibId in bibdata.entries:
                 bibEntry = bibdata.entries[bibId].fields
+                bibAuthors = bibdata.entries[bibId].persons['author']
                 print(f"- id: {bibId}", file=open(outputFiles[i], "a"))
+                print("  authors:", file=open(outputFiles[i], "a"))
+                for author in range(len(bibAuthors)):
+                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1)
+                    print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFiles[i], "a"))
+                    print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFiles[i], "a"))
                 for field in bibEntry:
                     # Remove accents and brackets from BibTeX field, and substitute underscores
                     detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','—')
-                    if field == 'author':
-                        authors = detexed_field.split(" and ")
-                        print(authors)
-                        print("  authors:", file=open(outputFiles[i], "a"))
-                        for author in authors:
-                            print(f"    - name: {author.split(', ')[1]}", file=open(outputFiles[i], "a"))
-                            print(f"      surname: {author.split(', ')[0]}", file=open(outputFiles[i], "a"))
-                    else:
-                        print(f"  {field}: {detexed_field}", file=open(outputFiles[i], "a"))
+                    # Print field
+                    print(f"  {field}: {detexed_field}", file=open(outputFiles[i], "a"))
 
 
 def main():
