@@ -22,7 +22,7 @@ def bib_to_YAML(inputFiles,outputFiles):
                 print(f"- id: {bibId}", file=open(outputFiles[0], "a"))
                 print("  authors:", file=open(outputFiles[0], "a"))
                 for author in range(len(bibAuthors)):
-                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1)
+                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1).replace('{','').replace('}','')
                     print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFiles[0], "a"))
                     print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFiles[0], "a"))
                 for field in bibEntry:
@@ -40,7 +40,7 @@ def bib_to_YAML(inputFiles,outputFiles):
                 print(f"- id: {bibId}", file=open(outputFiles[i], "a"))
                 print("  authors:", file=open(outputFiles[i], "a"))
                 for author in range(len(bibAuthors)):
-                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1)
+                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1).replace('{','').replace('}','')
                     print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFiles[i], "a"))
                     print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFiles[i], "a"))
                 for field in bibEntry:
