@@ -4,51 +4,41 @@ import libs.LatexAccents as TeXAccents
 import argparse
 import os
 
-def bib_to_YAML(inputFiles,outputFiles):
+def YAMLprinter(inputFile,outputFile):
     # Open BibTeX file
     parser = bibtex.Parser()
 
     # Initialize TeX Accent Converter
     converter = TeXAccents.AccentConverter()
-    
+
+    bibdata = parser.parse_file(inputFile)
+    for bibId in bibdata.entries:
+        bibEntry = bibdata.entries[bibId].fields
+        bibAuthors = bibdata.entries[bibId].persons['author']
+        print(f"- id: {bibId}", file=open(outputFile, "a"))
+        print(f"- entrytype: {bibdata.entries[bibId].type}", file=open(outputFile, "a"))
+        print("  authors:", file=open(outputFile, "a"))
+        for author in range(len(bibAuthors)):
+            detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1).replace('{','').replace('}','')
+            print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFile, "a"))
+            print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFile, "a"))
+        for field in bibEntry:
+            # Remove accents and brackets from BibTeX field, and substitute underscores
+            detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','—')
+            # Print field
+            print(f"  {field}: {detexed_field}", file=open(outputFile, "a"))
+
+def bib_to_YAML(inputFiles,outputFiles):    
     if len(outputFiles) == 1:
         inputs = ', '.join(inputFiles)
         print(f"# {outputFiles[0]} - Converted from {inputs} using bib2yml.py", file=open(outputFiles[0],"w"))
         for i in range(len(inputFiles)):
-            bibdata = parser.parse_file(inputFiles[i])
-            for bibId in bibdata.entries:
-                bibEntry = bibdata.entries[bibId].fields
-                bibAuthors = bibdata.entries[bibId].persons['author']
-                print(f"- id: {bibId}", file=open(outputFiles[0], "a"))
-                print(f"- type: {bibdata.entries[bibId].type}", file=open(outputFiles[0], "a"))
-                print("  authors:", file=open(outputFiles[0], "a"))
-                for author in range(len(bibAuthors)):
-                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1).replace('{','').replace('}','')
-                    print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFiles[0], "a"))
-                    print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFiles[0], "a"))
-                for field in bibEntry:
-                    # Remove accents and brackets from BibTeX field, and substitute underscores
-                    detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','—')
-                    # Print field
-                    print(f"  {field}: {detexed_field}", file=open(outputFiles[0], "a"))
+            YAMLprinter(inputFiles[i],outputFiles[0])
     else:
         for i in range(len(inputFiles)):
             print(f"# {outputFiles[i]} - Converted from {inputFiles[i]} using bib2yml.py", file=open(outputFiles[i],"w"))
-            bibdata = parser.parse_file(inputFiles[i])
-            for bibId in bibdata.entries:
-                bibEntry = bibdata.entries[bibId].fields
-                bibAuthors = bibdata.entries[bibId].persons['author']
-                print(f"- id: {bibId}", file=open(outputFiles[i], "a"))
-                print("  authors:", file=open(outputFiles[i], "a"))
-                for author in range(len(bibAuthors)):
-                    detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1).replace('{','').replace('}','')
-                    print(f"    - names: {detexed_author.split(',')[1].lstrip()}", file=open(outputFiles[i], "a"))
-                    print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFiles[i], "a"))
-                for field in bibEntry:
-                    # Remove accents and brackets from BibTeX field, and substitute underscores
-                    detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','—')
-                    # Print field
-                    print(f"  {field}: {detexed_field}", file=open(outputFiles[i], "a"))
+            YAMLprinter(inputFiles[i],outputFiles[i])
+
 
 
 def main():
