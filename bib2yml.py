@@ -24,7 +24,7 @@ def YAMLprinter(inputFile,outputFile):
             print(f"      surnames: {detexed_author.split(',')[0].lstrip()}", file=open(outputFile, "a"))
         for field in bibEntry:
             # Remove accents and brackets from BibTeX field, and substitute underscores
-            detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','—')
+            detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','–')
             # Print field
             print(f"  {field}: {detexed_field}", file=open(outputFile, "a"))
 
