@@ -16,7 +16,7 @@ def YAMLprinter(inputFile,outputFile):
         bibEntry = bibdata.entries[bibId].fields
         bibAuthors = bibdata.entries[bibId].persons['author']
         print(f"- id: {bibId}", file=open(outputFile, "a"))
-        print(f"- entrytype: {bibdata.entries[bibId].type}", file=open(outputFile, "a"))
+        print(f"  entrytype: {bibdata.entries[bibId].type}", file=open(outputFile, "a"))
         print("  authors:", file=open(outputFile, "a"))
         for author in range(len(bibAuthors)):
             detexed_author = converter.decode_Tex_Accents(str(bibAuthors[author]), utf8_or_ascii=1).replace('{','').replace('}','')
@@ -26,7 +26,7 @@ def YAMLprinter(inputFile,outputFile):
             # Remove accents and brackets from BibTeX field, and substitute underscores
             detexed_field = converter.decode_Tex_Accents(bibEntry[field], utf8_or_ascii=1).replace('{\_}','_').replace('{','').replace('}','').replace('--','–')
             # Print field
-            print(f"  {field}: {detexed_field}", file=open(outputFile, "a"))
+            print(f'  {field}: "{detexed_field}"', file=open(outputFile, "a"))
 
 def bib_to_YAML(inputFiles,outputFiles):    
     if len(outputFiles) == 1:
