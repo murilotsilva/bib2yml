@@ -26,7 +26,7 @@ will be converted to
 
 ```yaml
 - id: entry01
-- entrytype: article
+  entrytype: article
   authors:
     - names: Jerry
       surnames: Seinfeld
