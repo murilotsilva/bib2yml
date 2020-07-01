@@ -12,7 +12,7 @@ You can convert any number of bibtex .bib files into .yml by using the command
 
     python3 bib2yml.py -i inputfile.bib
     
-This will create a simple .yml file named `inputfile1.yml`. Each entry in the .bib file will be identified as an item, with fields being key/value pairs. For example, the bibtex entry
+This will create a simple .yml file named `inputfile.yml`. Each entry in the .bib file will be identified as an item, with fields being key/value pairs. For example, the bibtex entry
 
 ```bibtex
 @article{entry01,
